@@ -16,8 +16,9 @@ RAW = ROOT / "data" / "raw"
 # leading "h") still matches.
 PATTERNS = [
     "*hapi_population*.csv",
+    "zaf_admin_boundaries.gdb",
+    "hotosm_zaf_*",
 ]
-
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -38,8 +39,13 @@ def main() -> None:
         if dest.exists() and not args.force:
             print(f"skip   {src.name} (already in data/raw, use --force to overwrite)")
             continue
-        shutil.copy2(src, dest)
-        print(f"copied {src.name}  ({dest.stat().st_size / 1e6:.1f} MB)")
+        if src.is_dir():
+            if dest.exists():
+                shutil.rmtree(dest)
+            shutil.copytree(src, dest)
+        else:
+            shutil.copy2(src, dest)
+        print(f"copied {src.name}")
 
     print(f"\ndata/raw now holds {len(list(RAW.glob('*')))} file(s).")
 
