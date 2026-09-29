@@ -18,6 +18,7 @@ PATTERNS = [
     "*hapi_population*.csv",
     "zaf_admin_boundaries.gdb",
     "hotosm_zaf_*",
+    "*Census_2022_Municipal*.pdf",
 ]
 
 def main() -> None:
