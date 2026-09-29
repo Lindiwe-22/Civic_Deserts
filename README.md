@@ -23,6 +23,27 @@ Raw files go in `data/raw/` and are not committed. HAPI needs a free app identif
 3. Build amenity classes and compute people per amenity, overall and by age band.
 4. Rank and map the results, then build the Streamlit app.
 
+## Population methodology
+
+District population uses two sources, combined deliberately rather than picked from one:
+
+- **Totals**: Stats SA Census 2022 Municipal fact sheet (district/metro level, 52 areas). This is the more current, directly measured figure.
+- **Age structure**: HDX HAPI baseline population (2020), which provides a 5-year age-band breakdown. Each district's 2020 age-band shares are applied to that district's 2022 Stats SA total, so the age split reflects 2020 structure but the population level reflects 2022.
+
+This was a deliberate choice after comparing the two sources directly: HAPI's 2020 district-level *totals* diverge sharply from Census 2022 in ways that don't track real growth (e.g. City of Johannesburg -13%, several rural districts +30%+), most likely because HAPI's district split uses older population shares rather than a fresh count. Its age *proportions* are more defensible to carry forward than its absolute district counts.
+
+Four districts were renamed between HAPI's admin boundaries and the 2022 fact sheet; both names are kept for identifiability:
+
+| Current name | Former name |
+|---|---|
+| Sarah Baartman | Cacadu |
+| Garden Route | Eden |
+| Harry Gwala | Sisonke |
+| King Cetshwayo | Uthungulu |
+
+Age-band population is rounded per band, so district totals may be off by a few people (observed max: 3) due to independent rounding across 17 bands.
+
+
 ## Structure
 
 ```
