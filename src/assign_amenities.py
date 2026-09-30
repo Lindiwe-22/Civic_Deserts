@@ -128,8 +128,8 @@ def main() -> None:
 
     classes = [
         ("clinic", "hotosm_zaf_health_facilities*", "amenity", {"clinic", "hospital"}, True),
-        ("school", "hotosm_zaf_education_facilities*", "amenity", {"school"}, False),
-        ("bank", "hotosm_zaf_financial_services*", "amenity", {"bank", "atm"}, False),
+        ("school", "hotosm_zaf_education_facilities*", "amenity", {"school"}, True),
+        ("bank", "hotosm_zaf_financial_services*", "amenity", {"bank", "atm"}, True),
         ("police", None, "amenity", {"police"}, True),
     ]
     for label, pattern, tag_col, values, include_polygons in classes:
