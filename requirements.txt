@@ -2,3 +2,4 @@ pandas
 geopandas
 pyogrio
 pdfplumber
+matplotlib
