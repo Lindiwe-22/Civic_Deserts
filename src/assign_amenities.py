@@ -20,6 +20,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW = ROOT / "data" / "raw"
+INTERIM = ROOT / "data" / "interim"
 PROCESSED = ROOT / "data" / "processed"
 
 GDB = RAW / "zaf_admin_boundaries.gdb"
@@ -132,12 +133,18 @@ def main() -> None:
         ("bank", "hotosm_zaf_financial_services*", "amenity", {"bank", "atm"}, True),
         ("police", None, "amenity", {"police"}, True),
     ]
+    INTERIM.mkdir(parents=True, exist_ok=True)
     for label, pattern, tag_col, values, include_polygons in classes:
         gdf = load_class(label, pattern, tag_col, values, include_polygons)
         joined = assign_points(gdf, districts)
         print(f"  unassigned: {joined['admin2_code'].isna().sum()}")
         counts = joined.groupby("admin2_code").size().rename(f"n_{label}")
         all_counts.append(counts)
+
+        # Save the deduplicated point locations for downstream use
+        # (e.g. the settlement-to-nearest-amenity distance layer).
+        keep_cols = [c for c in ["osm_id", "name", tag_col] if c in gdf.columns] + ["geometry"]
+        gdf[keep_cols].to_file(INTERIM / f"{label}_points.geojson", driver="GeoJSON")
 
     result = districts[["admin2_code", "boundary_name"]].set_index("admin2_code")
     for counts in all_counts:
